@@ -40,7 +40,7 @@ class IngBeParser(CsvStatementParser):
         """Return iterable object consisting of a line per transaction
         """
         
-        reader = csv.reader(self.fin)
+        reader = csv.reader(self.fin, delimiter=';')
         next(reader, None)
         return reader
 
@@ -55,13 +55,10 @@ class IngBeParser(CsvStatementParser):
             date_value = line[5]
             account_to = line[2]
             currency = line[8]
-
-            # fix amount - Well done ING, mixing the comma as decimal separator and as CSV delimiter. Way to go...
-            line[6] = line[6]+"."+line[7]                       
             amount = line[6]
             
             # Pack info in description
-            line[9] = line[9]+"-"+line[10]+"-"+line[11] 
+            line[9] = line[9]+"-"+line[10]+"-"
             description = line[9]
 
             stmtline = super(IngBeParser, self).parse_record(line)
